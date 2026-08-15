@@ -1,0 +1,371 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+@layer base {
+  :root {
+    --background-deep: #070A09;
+    --background: #0A0E0C;
+    --background-elevated: #0E1411;
+
+    --sidebar: #0B100E;
+    --sidebar-elevated: #111815;
+
+    --surface: #121916;
+    --surface-elevated: #16201C;
+    --surface-high: #1A2621;
+    --surface-hover: #202D27;
+
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --border-default: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+
+    --primary: #00C97D;
+    --primary-strong: #00E58F;
+    --primary-dark: #009F63;
+    --primary-muted: rgba(0, 201, 125, 0.08);
+    --primary-glow: rgba(0, 229, 143, 0.15);
+
+    --foreground: #F3F8F5;
+    --foreground-secondary: #C4CEC9;
+    --muted-foreground: #7F8F87;
+
+    --success: #00D084;
+    --warning: #F4B942;
+    --danger: #FF5B64;
+    --info: #52A3FF;
+    
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: var(--background);
+  }
+}
+
+/* Custom Scrollbar for better dark mode aesthetics */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Subtle Technical Atmosphere Effects */
+.tech-grid {
+  background-image: radial-gradient(rgba(0, 201, 125, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.emerald-glow {
+  box-shadow: 0 0 40px -10px rgba(0, 201, 125, 0.15);
+}
+
+.radial-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 201, 125, 0.06) 0%, transparent 70%);
+}
+
+.inner-highlight {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Page transitions */
+.fade-in-slide {
+  animation: fadeInSlide 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulses */
+.status-pulse {
+  position: relative;
+  display: inline-block;
+}
+.status-pulse.absolute {
+  position: absolute;
+}
+.status-pulse::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Motion Reduced override */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .status-pulse::after {
+    animation: none !important;
+  }
+}
+
+/* Custom Login Page Showcase Animations */
+/* Scene 1: Mesas e Cadeiras (Montagem do Evento) */
+@keyframes table-drop {
+  0% { transform: translateY(-40px) scale(0.6); opacity: 0; }
+  60% { transform: translateY(5px) scale(1.02); opacity: 1; }
+  80% { transform: translateY(-2px) scale(0.99); }
+  100% { transform: translateY(0) scale(1); }
+}
+.animate-table-drop {
+  animation: table-drop 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes chair-left {
+  0% { transform: translateX(-60px) scale(0.4); opacity: 0; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+.animate-chair-left {
+  animation: chair-left 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) 0.4s forwards;
+  opacity: 0; /* starts hidden until animation triggers */
+}
+
+@keyframes chair-right {
+  0% { transform: translateX(60px) scale(0.4); opacity: 0; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+.animate-chair-right {
+  animation: chair-right 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) 0.6s forwards;
+  opacity: 0; /* starts hidden until animation triggers */
+}
+
+@keyframes vase-pop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-vase-pop {
+  animation: vase-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards;
+  opacity: 0;
+}
+
+.animate-float-item {
+  animation: float-item 3s ease-in-out infinite;
+}
+@keyframes float-item {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Scene 2: Entrega (Rota no Mapa) */
+@keyframes draw-route {
+  0% { stroke-dashoffset: 200; }
+  100% { stroke-dashoffset: 0; }
+}
+.animate-draw-route {
+  animation: draw-route 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pin-drop {
+  0% { transform: translateY(-20px) scale(0); opacity: 0; }
+  60% { transform: translateY(5px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.animate-pin-drop {
+  animation: pin-drop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes pin-destination {
+  0% { transform: scale(0); opacity: 0; }
+  75% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pin-destination {
+  animation: pin-destination 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2.2s forwards;
+  opacity: 0;
+}
+
+/* Scene 3: Freezers (Efeito de Resfriamento) */
+@keyframes freezer-appear {
+  0% { transform: scale(0.7) rotate(-3deg); opacity: 0; filter: blur(4px); }
+  100% { transform: scale(1) rotate(0); opacity: 1; filter: blur(0); }
+}
+.animate-freezer-appear {
+  animation: freezer-appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+}
+
+@keyframes frost-drift {
+  0% { transform: translateY(15px); opacity: 0; }
+  30% { opacity: 0.8; }
+  70% { opacity: 0.4; }
+  100% { transform: translateY(-30px); opacity: 0; }
+}
+.animate-frost-1 {
+  animation: frost-drift 3s ease-in-out infinite;
+}
+.animate-frost-2 {
+  animation: frost-drift 3.5s ease-in-out infinite 0.7s;
+}
+.animate-frost-3 {
+  animation: frost-drift 2.8s ease-in-out infinite 1.4s;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; transform: scale(0.95); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 15s linear infinite;
+}
+
+/* Scene 4: Bebidas (Shelf Organization) */
+@keyframes crate-fade {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 0.4; transform: scale(1); }
+}
+.animate-crate-fade {
+  animation: crate-fade 0.8s ease-out forwards;
+}
+
+@keyframes bottle-slide {
+  0% { transform: translateX(-80px) rotate(-20deg); opacity: 0; }
+  100% { transform: translateX(0) rotate(0); opacity: 1; }
+}
+.animate-bottle-slide {
+  animation: bottle-slide 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) 0.3s forwards;
+  opacity: 0;
+}
+
+@keyframes can-slide {
+  0% { transform: translateX(80px) rotate(20deg); opacity: 0; }
+  100% { transform: translateX(0) rotate(0); opacity: 1; }
+}
+.animate-can-slide {
+  animation: can-slide 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) 0.6s forwards;
+  opacity: 0;
+}
+
+@keyframes drop-slide {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.4; }
+  100% { transform: translateY(22px); opacity: 0; }
+}
+.animate-drop-slide {
+  animation: drop-slide 2s linear infinite;
+}
+.animate-drop-slide-can {
+  animation: drop-slide 1.8s linear infinite;
+}
+
+@keyframes liquid-wave {
+  0%, 100% { transform: rotate(0deg) skewY(0deg); }
+  25% { transform: rotate(1deg) skewY(1deg); }
+  75% { transform: rotate(-1deg) skewY(-1deg); }
+}
+.animate-liquid-wave {
+  animation: liquid-wave 4s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes border-glow-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1023px) {
+  .mobile-neon-border {
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    background: transparent;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 201, 125, 0.12);
+    border: none !important;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .mobile-neon-border::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      transparent,
+      transparent,
+      rgba(0, 201, 125, 0.1),
+      #00c97d,
+      rgba(0, 201, 125, 0.1),
+      transparent,
+      transparent
+    );
+    animation: border-glow-spin 8s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-neon-border::before {
+      animation: none;
+      background: rgba(0, 201, 125, 0.4);
+    }
+  }
+}
