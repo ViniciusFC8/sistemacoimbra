@@ -58,8 +58,8 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: 'admin@comercialcoimbra.com.br',
-      password: '123456',
+      email: '',
+      password: '',
       remember: false,
     },
   });
@@ -468,7 +468,7 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel className="text-xs font-semibold text-foreground-secondary">E-mail</FormLabel>
                     <FormControl>
-                      <Input disabled={isLoading} placeholder="admin@comercialcoimbra.com.br" type="email" {...field} />
+                      <Input disabled={isLoading} placeholder="seu@email.com.br" type="email" autoComplete="email" {...field} />
                     </FormControl>
                     <FormMessage className="text-xs text-danger" />
                   </FormItem>
@@ -487,6 +487,7 @@ export default function LoginPage() {
                           disabled={isLoading}
                           placeholder="••••••••" 
                           type={showPassword ? 'text' : 'password'} 
+                          autoComplete="current-password"
                           {...field} 
                           className="pr-10"
                         />
