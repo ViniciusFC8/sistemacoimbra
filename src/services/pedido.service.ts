@@ -209,5 +209,14 @@ export const pedidoService = {
       throw new Error(error.message);
     }
     return data;
+  },
+
+  async deletePedido(id: string) {
+    const supabase = createClient();
+    const { error } = await supabase.rpc('excluir_pedido_seguro', { p_pedido_id: id });
+    if (error) {
+      console.error('Error deleting pedido:', error);
+      throw new Error(error.message);
+    }
   }
 };

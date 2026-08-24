@@ -96,6 +96,10 @@ function PedidosContent() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isInsufficientStockModalOpen, setIsInsufficientStockModalOpen] = useState(false);
 
+  // Delete states
+  const [pedidoToDelete, setPedidoToDelete] = useState<Pedido | null>(null);
+  const [isDeletingPedido, setIsDeletingPedido] = useState(false);
+
   const { register, control, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<PedidoFormValues>({
     resolver: zodResolver(pedidoSchema),
     defaultValues: {
@@ -452,6 +456,24 @@ function PedidosContent() {
       }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!pedidoToDelete) return;
+    try {
+      setIsDeletingPedido(true);
+      setStatusError('');
+      await pedidoService.deletePedido(pedidoToDelete.id);
+      await loadData();
+      setPedidoToDelete(null);
+      setSelectedPedido(null);
+      // Aqui idealmente seria um toast de sucesso: "Pedido excluído com sucesso."
+    } catch (error: any) {
+      console.error('Erro ao excluir pedido:', error);
+      setStatusError(error.message || 'Erro ao excluir pedido.');
+    } finally {
+      setIsDeletingPedido(false);
     }
   };
 
@@ -1138,6 +1160,15 @@ function PedidosContent() {
                   Editar Pedido
                 </Button>
               )}
+              {userProfile && userProfile.papel === 'administrador' && (
+                <Button 
+                  onClick={() => setPedidoToDelete(selectedPedido)}
+                  variant="outline"
+                  className="flex-1 border-danger text-danger hover:bg-danger/10 text-xs font-bold h-9.5 rounded-xl cursor-pointer"
+                >
+                  Excluir pedido
+                </Button>
+              )}
               <Button 
                 onClick={() => {
                   setSelectedPedido(null);
@@ -1151,6 +1182,52 @@ function PedidosContent() {
             </div>
           </div>
         )}
+      </Drawer>
+
+      {/* Modal de Confirmação de Exclusão */}
+      <Drawer 
+        isOpen={pedidoToDelete !== null} 
+        onClose={() => {
+          if (!isDeletingPedido) setPedidoToDelete(null);
+        }}
+        title="Excluir este pedido?"
+      >
+        <div className="flex flex-col gap-6 p-6 h-full justify-between">
+          <div className="flex flex-col items-center text-center gap-4 mt-6">
+            <div className="w-16 h-16 rounded-full bg-danger/10 flex items-center justify-center text-danger">
+              <Trash2 className="w-8 h-8" />
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Esta ação removerá o pedido e desfará seus efeitos operacionais no estoque e na agenda. Essa ação não poderá ser desfeita.
+            </p>
+            {statusError && (
+              <div className="p-3 mt-4 w-full bg-danger/10 text-danger border border-danger/20 rounded-xl text-xs font-semibold text-left">
+                {statusError}
+              </div>
+            )}
+          </div>
+          
+          <div className="flex gap-4">
+            <Button 
+              onClick={() => {
+                setPedidoToDelete(null);
+                setStatusError('');
+              }}
+              variant="outline"
+              disabled={isDeletingPedido}
+              className="flex-1 h-11 rounded-xl cursor-pointer font-semibold"
+            >
+              Cancelar
+            </Button>
+            <Button 
+              onClick={handleDelete}
+              disabled={isDeletingPedido}
+              className="flex-1 bg-danger hover:bg-danger/80 text-white font-bold h-11 rounded-xl cursor-pointer shadow-[0_0_15px_rgba(255,0,0,0.15)]"
+            >
+              {isDeletingPedido ? 'Excluindo...' : 'Excluir pedido'}
+            </Button>
+          </div>
+        </div>
       </Drawer>
 
       {/* Modal de Estoque Insuficiente */}

@@ -367,6 +367,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      excluir_pedido_seguro: {
+        Args: {
+          p_pedido_id: string
+        }
+        Returns: undefined
+      }
       atualizar_pedido: {
         Args: {
           p_bebidas_por_escrito: string
